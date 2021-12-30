@@ -10,7 +10,7 @@ import SwiftUI
 struct DateButton: View {
     var label: String = ""
     var fontName: String = "Arial"
-    @Binding var date: Date
+    @Binding var date: Date?
     @Binding var selectedDate: Date
     @State var isToday: Bool = false
     var onTap: ((_ date:Date)->Void)?
@@ -19,7 +19,9 @@ struct DateButton: View {
     @State private var selected: Bool = false
     
     private func updateSelectedStatus() {
-        selected = Date.isSameDate(date, selectedDate)
+        if let date = date {
+            selected = Date.isSameDate(date, selectedDate)
+        }
     }
     
     var body: some View {
@@ -32,13 +34,17 @@ struct DateButton: View {
                     .opacity(0.1)
             )
             .onAppear {
-                isToday = Date.isSameDate(date, Date())
+                if let date = date {
+                    isToday = Date.isSameDate(date, Date())
+                }
                 updateSelectedStatus()
             }.onChange(of: selectedDate, perform: { newValue in
                 updateSelectedStatus()
             })
             .onTapGesture {
-                onTap?(date)
+                if let date = date {
+                    onTap?(date)
+                }
             }
     }
 }

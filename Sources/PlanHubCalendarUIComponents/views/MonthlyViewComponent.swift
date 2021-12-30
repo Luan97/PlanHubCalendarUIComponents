@@ -76,7 +76,7 @@ struct MonthlyViewComponent: View {
                 ForEach(daysArray.indices, id:\.self) {index in
                     let date = daysArray[index]
                     let day = Date.getDayStringByDate(date)
-                    DateButton(label:day, fontName:fontName, date:date, selectedDate:$selection, onTap: { date in
+                    DateButton(label:day, fontName:fontName, date:Binding.constant(date ?? nil), selectedDate:$selection, onTap: { date in
                         selection = date
                     }).id(index)
                 }
