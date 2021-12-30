@@ -72,16 +72,15 @@ struct MonthlyViewComponent: View {
                     Text(sym).font(.custom(fontName, size: 14)).foregroundColor(.gray)
                 }
             }
-            LazyVGrid(columns: sevenColumnGrid) {
-                ForEach(daysArray.indices, id:\.self) {index in
-                    let date = daysArray[index]
-                    let day = Date.getDayStringByDate(date)
-                    let isToday = isTodayFocusedMonth && day == String(todayDay)
-                    DateButton(label:day, fontName:fontName, date:date, selectedDate:$selection, isToday:isToday, onTap: { date in
-                        selection = date
-                    })//.id(index)
-                }
-            }//.id(UUID())//.opacity(transitOpacity)
+//            LazyVGrid(columns: sevenColumnGrid) {
+//                ForEach(daysArray.indices, id:\.self) {index in
+//                    let date = daysArray[index]
+//                    let day = Date.getDayStringByDate(date)
+//                    DateButton(label:day, fontName:fontName, date:date, selectedDate:$selection, onTap: { date in
+//                        selection = date
+//                    })//.id(index)
+//                }
+//            }.id(UUID())//.opacity(transitOpacity)
         }.frame(maxWidth:.infinity, alignment: .top).background(bgColor)
         .onChange(of: month) { _ in
             processMonthYear()

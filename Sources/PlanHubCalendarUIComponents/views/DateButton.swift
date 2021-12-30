@@ -34,6 +34,7 @@ struct DateButton: View {
                     .opacity(0.1)
             )
             .onAppear {
+                isToday = Date.isSameDate(date, Date())
                 updateSelectedStatus()
             }.onChange(of: selectedDate, perform: { newValue in
                 updateSelectedStatus()
