@@ -54,7 +54,6 @@ extension Date {
         var mInt = 1
         for (i, m) in monthSymbols.enumerated() {
             if month == m {
-                print(m)
                 mInt = i + 1
             }
         }

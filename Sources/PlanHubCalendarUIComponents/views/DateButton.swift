@@ -22,7 +22,6 @@ struct DateButton: View {
         if let theDate = date {
             selected = Date.isSameDate(theDate, selectedDate)
         }
-        print(selected)
     }
     
     var body: some View {
