@@ -18,6 +18,14 @@ public struct PlanHubCalendarUIComponents: View {
     @State private var month: String = ""
     @State private var year: String = ""
     
+    public init(selection:Binding<Date>, scrollFocusDate:Binding<Date>, fgColor:Binding<Color>, bgColor:Binding<Color>, fontName:Binding<String>) {
+        _selection = selection
+        _scrollFocusDate = scrollFocusDate
+        _fgColor = fgColor
+        _bgColor = bgColor
+        _fontName = fontName
+    }
+    
     public var body: some View {
         ZStack(alignment: .topLeading){
             MonthlyViewComponent(selection:$selection, month:$month, year:$year, fgColor:$fgColor, bgColor:$bgColor, fontName:fontName).onChange(of: selection, perform: { newValue in
