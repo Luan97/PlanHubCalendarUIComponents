@@ -81,7 +81,7 @@ struct MonthlyViewComponent: View {
                         selection = date
                     })//.id(index)
                 }
-            }.id(UUID())//.opacity(transitOpacity)
+            }//.id(UUID())//.opacity(transitOpacity)
         }.frame(maxWidth:.infinity, alignment: .top).background(bgColor)
         .onChange(of: month) { _ in
             processMonthYear()
