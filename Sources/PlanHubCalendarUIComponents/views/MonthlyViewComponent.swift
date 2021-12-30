@@ -28,6 +28,15 @@ struct MonthlyViewComponent: View {
     @State private var todayDay: Int = 0
     @State private var isTodayFocusedMonth: Bool = false
     
+    init(selection:Binding<Date>, month:Binding<String>, year:Binding<String>, fgColor:Binding<Color>, bgColor:Binding<Color>, fontName:String) {
+        _selection = selection
+        _month = month
+        _year = year
+        _fgColor = fgColor
+        _bgColor = bgColor
+        self.fontName = fontName
+    }
+    
     func processMonthYear() {
         transitOpacity = 0.0
         let mInt = Date.getMonthIndexByMonthString(month)
@@ -74,9 +83,7 @@ struct MonthlyViewComponent: View {
                 }
             }.opacity(transitOpacity).id(UUID())
         }.frame(maxWidth:.infinity, alignment: .top).background(bgColor)
-        .onAppear {
-            processMonthYear()
-        }.onChange(of: month) { _ in
+        .onChange(of: month) { _ in
             processMonthYear()
         }.onChange(of: year) { _ in
             processMonthYear()
@@ -86,6 +93,6 @@ struct MonthlyViewComponent: View {
 
 struct MonthlyViewComponent_Previews: PreviewProvider {
     static var previews: some View {
-        MonthlyViewComponent(selection:Binding.constant(Date()), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Binding.constant(Color.blue), bgColor: Binding.constant(Color.white))
+        MonthlyViewComponent(selection:Binding.constant(Date()), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Binding.constant(Color.blue), bgColor: Binding.constant(Color.white), fontName:"Arial")
     }
 }
