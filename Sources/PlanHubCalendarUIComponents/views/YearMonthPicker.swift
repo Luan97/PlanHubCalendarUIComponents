@@ -89,9 +89,9 @@ struct YearMonthPicker: View {
                     Image(systemName: "chevron.right")
                 }.disabled(disableRight)
             }.padding(.horizontal, 6)
-            HStack {
-                PickerView(data: data, fontName:fontName, fontSize: 18.0, selections: $selections)
-            }.onChange(of: selections) { _ in
+            PickerView(data: data, fontName:fontName, fontSize: 18.0, selections: $selections)
+            .frame(maxWidth:.infinity)
+            .onChange(of: selections) { _ in
                 updateMonthYearValue()
             }.opacity(expanded ? 1.0 : 0.0)
         }.onAppear {
