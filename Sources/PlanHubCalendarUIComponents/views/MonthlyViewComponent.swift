@@ -79,9 +79,9 @@ struct MonthlyViewComponent: View {
                     let isToday = isTodayFocusedMonth && day == String(todayDay)
                     DateButton(label:day, fontName:fontName, date:date, selectedDate:$selection, isToday:isToday, onTap: { date in
                         selection = date
-                    }).id(index)
+                    })//.id(index)
                 }
-            }.opacity(transitOpacity).id(UUID())
+            }.id(UUID())//.opacity(transitOpacity)
         }.frame(maxWidth:.infinity, alignment: .top).background(bgColor)
         .onChange(of: month) { _ in
             processMonthYear()
