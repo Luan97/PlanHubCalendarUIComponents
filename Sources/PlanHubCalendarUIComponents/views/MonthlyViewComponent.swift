@@ -69,7 +69,7 @@ struct MonthlyViewComponent: View {
         VStack{
             LazyVGrid(columns: sevenColumnGrid) {
                 ForEach(weekdaySymbols, id:\.self) {sym in
-                    Text(sym).font(.custom(fontName, size: 14)).foregroundColor(.gray)
+                    Text(sym).font(.custom(fontName, size: 12)).foregroundColor(.gray)
                 }
             }
             LazyVGrid(columns: sevenColumnGrid) {
