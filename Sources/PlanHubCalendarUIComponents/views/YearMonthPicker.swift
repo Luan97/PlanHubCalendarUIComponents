@@ -10,8 +10,8 @@ import SwiftUI
 struct YearMonthPicker: View {
     @Binding var month: String
     @Binding var year: String
-    @Binding var fgColor: Color
-    @Binding var bgColor: Color
+    var fgColor: Color
+    var bgColor: Color
     var fontName: String = "Arial"
     
     private let monthSymbols: [String] = Calendar.current.monthSymbols
@@ -88,15 +88,16 @@ struct YearMonthPicker: View {
                 } label: {
                     Image(systemName: "chevron.right")
                 }.disabled(disableRight)
-            }.padding(.horizontal, 6)
+            }.padding(.horizontal, 10)
             PickerView(data: data, fontName:fontName, fontSize: 18.0, selections: $selections)
             .frame(maxWidth:.infinity)
             .onChange(of: selections) { _ in
                 updateMonthYearValue()
             }.opacity(expanded ? 1.0 : 0.0)
-        }.onAppear {
+        }.onAppear(perform: {
             updateMonthYearValue()
-        }.onChange(of: month, perform: { _ in
+        })
+        .onChange(of: month, perform: { _ in
             for (i, symbol) in monthSymbols.enumerated() {
                 if month == symbol {
                     monthIndex = i
@@ -118,6 +119,6 @@ struct YearMonthPicker: View {
 
 struct YearMonthPicker_Previews: PreviewProvider {
     static var previews: some View {
-        YearMonthPicker(month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Binding.constant(Color.blue), bgColor:Binding.constant(Color.white))
+        YearMonthPicker(month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Color.blue, bgColor:Color.white, fontName: "Arial")
     }
 }

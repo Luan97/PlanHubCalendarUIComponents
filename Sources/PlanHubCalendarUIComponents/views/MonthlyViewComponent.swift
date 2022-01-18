@@ -11,8 +11,9 @@ struct MonthlyViewComponent: View {
     @Binding var selection: Date
     @Binding var month: String
     @Binding var year: String
-    @Binding var fgColor: Color
-    @Binding var bgColor: Color
+    var fgColor: Color
+    var bgColor: Color
+    var labelColor: Color
     var fontName: String = "Arial"
     
     @State private var totalDays: Int = 0
@@ -28,12 +29,13 @@ struct MonthlyViewComponent: View {
     @State private var todayDay: Int = 0
     @State private var isTodayFocusedMonth: Bool = false
     
-    init(selection:Binding<Date>, month:Binding<String>, year:Binding<String>, fgColor:Binding<Color>, bgColor:Binding<Color>, fontName:String) {
+    init(selection:Binding<Date>, month:Binding<String>, year:Binding<String>, fgColor:Color, bgColor:Color, labelColor:Color, fontName:String) {
         _selection = selection
         _month = month
         _year = year
-        _fgColor = fgColor
-        _bgColor = bgColor
+        self.fgColor = fgColor
+        self.bgColor = bgColor
+        self.labelColor = labelColor
         self.fontName = fontName
     }
     
@@ -76,7 +78,7 @@ struct MonthlyViewComponent: View {
                 ForEach(daysArray.indices, id:\.self) {index in
                     let date = daysArray[index]
                     let day = Date.getDayStringByDate(date)
-                    DateButton(label:day, fontName:fontName, date:Binding.constant(date ?? nil), selectedDate:$selection, onTap: { date in
+                    DateButton(label:day, labelColor:labelColor, fontName:fontName, date:Binding.constant(date ?? nil), selectedDate:$selection, onTap: { date in
                         selection = date
                     }).id(index)
                 }
@@ -92,6 +94,7 @@ struct MonthlyViewComponent: View {
 
 struct MonthlyViewComponent_Previews: PreviewProvider {
     static var previews: some View {
-        MonthlyViewComponent(selection:Binding.constant(Date()), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Binding.constant(Color.blue), bgColor: Binding.constant(Color.white), fontName:"Arial")
+        MonthlyViewComponent(selection:Binding.constant(Date()), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Color.blue, bgColor: Color.white, labelColor: Color.gray, fontName:"Arial")
+        
     }
 }

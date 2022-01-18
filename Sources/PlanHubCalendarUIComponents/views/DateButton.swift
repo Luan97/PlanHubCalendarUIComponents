@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DateButton: View {
     var label: String = ""
+    var labelColor:Color = .gray
     var fontName: String = "Arial"
     @Binding var date: Date?
     @Binding var selectedDate: Date
@@ -26,12 +27,12 @@ struct DateButton: View {
     
     var body: some View {
         Text(label).font(.custom(fontName, size: 14)).padding(.vertical, 6)
-            .foregroundColor(isToday ? .blue : .black)
+            .foregroundColor(isToday ? .blue : labelColor)
             .background(
                 Circle()
                     .frame(width:size, height:size)
                     .foregroundColor(selected ? Color.blue : Color.clear)
-                    .opacity(0.1)
+                    .opacity(0.2)
             )
             .onAppear {
                 if let date = date {
