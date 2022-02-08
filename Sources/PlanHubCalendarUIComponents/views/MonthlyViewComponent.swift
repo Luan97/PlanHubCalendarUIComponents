@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MonthlyViewComponent: View {
+    var from: Date
+    var to: Date
     @Binding var selection: Date
     @Binding var month: String
     @Binding var year: String
@@ -19,7 +21,6 @@ struct MonthlyViewComponent: View {
     @State private var totalDays: Int = 0
     @State private var firstWeekday: Int = 0
     @State private var daysArray: [Date?] = []
-    @State private var transitOpacity: CGFloat = 1.0
     private let monthSymbols: [String] = Calendar.current.monthSymbols
     private let weekdaySymbols: [String] = Calendar.current.shortStandaloneWeekdaySymbols
     private let sevenColumnGrid:Array = Array(repeating: GridItem(.flexible(), alignment: .center), count: 7)
@@ -28,19 +29,11 @@ struct MonthlyViewComponent: View {
     @State private var todayMonth: Int = 0
     @State private var todayDay: Int = 0
     @State private var isTodayFocusedMonth: Bool = false
-    
-    init(selection:Binding<Date>, month:Binding<String>, year:Binding<String>, fgColor:Color, bgColor:Color, labelColor:Color, fontName:String) {
-        _selection = selection
-        _month = month
-        _year = year
-        self.fgColor = fgColor
-        self.bgColor = bgColor
-        self.labelColor = labelColor
-        self.fontName = fontName
-    }
+    @State private var opacity:CGFloat = 0.0
+    @State private var minMonth:String = ""
+    @State private var minDay:Int = 1
     
     func processMonthYear() {
-        transitOpacity = 0.0
         let mInt = Date.getMonthIndexByMonthString(month)
         let yInt = Int(year) ?? 2021
         totalDays = Date.getNumberOfDaysInMonth(yInt, mInt)
@@ -61,40 +54,50 @@ struct MonthlyViewComponent: View {
             let date = Date.dateSwapWithYearMonthAndDay(Date(), year: yInt, month:mInt , day: i)
             daysArray.append(date)
         }
-        
-        withAnimation(.easeInOut(duration: 0.3)) {
-            transitOpacity = 1.0
+    }
+    
+    func checkDisabled(_ date:Date?) -> Bool {
+        if let day = date {
+            let dayIndex = Date.getDayIntByDate(day)
+            return minMonth == month && dayIndex < minDay
         }
+        return false
     }
     
     var body: some View {
         VStack{
             LazyVGrid(columns: sevenColumnGrid) {
                 ForEach(weekdaySymbols, id:\.self) {sym in
-                    Text(sym).font(.custom(fontName, size: 12)).foregroundColor(.gray)
+                    Text(sym).font(.custom(fontName, size: 12)).foregroundColor(fgColor)
                 }
             }
             LazyVGrid(columns: sevenColumnGrid) {
                 ForEach(daysArray.indices, id:\.self) {index in
                     let date = daysArray[index]
                     let day = Date.getDayStringByDate(date)
-                    DateButton(label:day, labelColor:labelColor, fontName:fontName, date:Binding.constant(date ?? nil), selectedDate:$selection, onTap: { date in
+                    let disabled:Bool = checkDisabled(date)
+                    DateButton(label:day, labelColor:labelColor, fontName:fontName, date:Binding.constant(date ?? nil), selectedDate:$selection, disabled:Binding.constant(disabled), onTap: { date in
                         selection = date
                     }).id(index)
                 }
-            }.id(UUID()).opacity(transitOpacity)
+            }
         }.frame(maxWidth:.infinity, alignment: .top).background(bgColor)
         .onChange(of: month) { _ in
             processMonthYear()
         }.onChange(of: year) { _ in
             processMonthYear()
+        }.onAppear {
+            minMonth = Date.getMonthStringByDate(from)
+            minDay = Date.getDayIntByDate(from)
         }
     }
 }
 
 struct MonthlyViewComponent_Previews: PreviewProvider {
+    @State static var from = Date.getFutureDaysBy(Date(), -1, component: .month)
+    @State static var to = Date.getFutureDaysBy(Date(), 10, component: .year)
     static var previews: some View {
-        MonthlyViewComponent(selection:Binding.constant(Date()), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Color.blue, bgColor: Color.white, labelColor: Color.gray, fontName:"Arial")
+        MonthlyViewComponent(from: from, to: to, selection:Binding.constant(Date()), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Color.blue, bgColor: Color.white, labelColor: Color.gray, fontName:"Arial")
         
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PickerView: UIViewRepresentable {
-    var data: [[String]]
+    @Binding var data: [[String]]
     var fontName: String = ""
     var fontSize: CGFloat = 18.0
     @Binding var selections: [Int]

@@ -98,6 +98,11 @@ extension Date {
         return month
     }
     
+    static func getYearIntByDate(_ date:Date = Date()) -> Int {
+        let year = Calendar.current.component(.year, from: date)
+        return year
+    }
+    
     static func getDayStringByDate(_ date:Date?) -> String  {
         guard let date = date else {
             return ""

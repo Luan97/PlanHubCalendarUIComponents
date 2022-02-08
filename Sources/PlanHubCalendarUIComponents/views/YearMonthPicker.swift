@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct YearMonthPicker: View {
+    var from: Date
+    var to: Date
     @Binding var month: String
     @Binding var year: String
     var fgColor: Color
@@ -15,20 +17,24 @@ struct YearMonthPicker: View {
     var fontName: String = "Arial"
     
     private let monthSymbols: [String] = Calendar.current.monthSymbols
-    private let yearRange: Array = Array(2021...3000)
+    @State private var yearRange: Array = Array(2021...2100)
     @State private var expanded: Bool = false
     
-    private let data: [[String]] = [
-            Calendar.current.monthSymbols,
-            Array(2021...3000).map { "\($0)" }
-        ]
-    @State private var selections: [Int] = [11, 0]
+    @State private var data: [[String]] = []
+    @State private var selections: [Int] = [0, 0]
     @State private var disableLeft: Bool = false
     @State private var disableRight: Bool = false
-    @State private var monthIndex: Int = 11
+    @State private var monthIndex: Int = 0
     @State private var yearIndex: Int = 0
     
     func updateMonthYearValue() {
+        let sYear = Date.getYearIntByDate(from)
+        let eYear = Date.getYearIntByDate(to)
+        yearRange = Array(sYear...eYear)
+        data = [
+            Calendar.current.monthSymbols,
+            yearRange.map { "\($0)" }
+        ]
         if let mIndex = selections.first, let yIndex = selections.last {
             month = monthSymbols[mIndex]
             for (i, yValue) in yearRange.enumerated() {
@@ -89,11 +95,13 @@ struct YearMonthPicker: View {
                     Image(systemName: "chevron.right")
                 }.disabled(disableRight)
             }.padding(.horizontal, 10)
-            PickerView(data: data, fontName:fontName, fontSize: 18.0, selections: $selections)
-            .frame(maxWidth:.infinity)
-            .onChange(of: selections) { _ in
-                updateMonthYearValue()
-            }.opacity(expanded ? 1.0 : 0.0)
+            if data.count > 0 {
+                PickerView(data: $data, fontName:fontName, fontSize: 18.0, selections: $selections)
+                .frame(maxWidth:.infinity)
+                .onChange(of: selections) { _ in
+                    updateMonthYearValue()
+                }.opacity(expanded ? 1.0 : 0.0)
+            }
         }.onAppear(perform: {
             updateMonthYearValue()
         })
@@ -119,6 +127,6 @@ struct YearMonthPicker: View {
 
 struct YearMonthPicker_Previews: PreviewProvider {
     static var previews: some View {
-        YearMonthPicker(month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Color.blue, bgColor:Color.white, fontName: "Arial")
+        YearMonthPicker(from: Date(), to: Date(), month:Binding.constant("December"), year:Binding.constant("2021"), fgColor: Color.blue, bgColor:Color.white, fontName: "Arial")
     }
 }
