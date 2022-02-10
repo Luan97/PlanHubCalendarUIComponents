@@ -43,6 +43,9 @@ struct YearMonthPicker: View {
                 }
             }
         }
+        let m = selections.first ?? 0
+        let y = selections.last ?? 0
+        updateArrowButtonState(m, y)
     }
     
     func updateCalendarByMonth(_ increase:Bool) {
@@ -67,9 +70,16 @@ struct YearMonthPicker: View {
                 }
             }
         }
-        disableLeft = y == 0 && m == 0
-        disableRight = y == yearRange.count - 1 && m == 11
+        
+        updateArrowButtonState(m, y)
         selections = [m, y]
+    }
+    
+    func updateArrowButtonState(_ monthIndex:Int, _ yearIndex:Int) {
+        let fMonth = Date.getMonthStringByDate(from, .fullMonth)
+        let fIndex:Int = monthSymbols.firstIndex(of: fMonth) ?? 0
+        disableLeft = yearIndex == 0 && monthIndex <= fIndex
+        disableRight = yearIndex == yearRange.count - 1 && monthIndex == 11
     }
 
     var body: some View {

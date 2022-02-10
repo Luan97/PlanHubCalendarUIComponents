@@ -58,8 +58,9 @@ struct MonthlyViewComponent: View {
     
     func checkDisabled(_ date:Date?) -> Bool {
         if let day = date {
-            let dayIndex = Date.getDayIntByDate(day)
-            return minMonth == month && dayIndex < minDay
+            if day < from {
+                return true
+            }
         }
         return false
     }
